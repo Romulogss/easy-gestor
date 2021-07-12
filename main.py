@@ -1,25 +1,9 @@
-import requests as request
-from pprint import pprint
-import json
-
-
-def cnpj_is_valid(cnpj):
-    valido = True
-    if len(cnpj) < 14:
-        valido = False
-    else:
-        response = request.get('https://www.receitaws.com.br/v1/cnpj/065284598000112')
-        if response.text['status'] == 'ERROR':
-            valido = False
-    return valido
-
-
-response = request.get('https://www.receitaws.com.br/v1/cnpj/065284598000112')
-
-
-def get_cnpj():
-    return input("Informe o CNPJ que deseja buscar (somente números): ")
-
+from module import (
+    get_empresa_by_cnpj,
+    shape_empresa,
+    get_cnpj,
+    cnpj_is_valid
+)
 
 while True:
     print("Bem-vindo ao consultor de CNPJ")
@@ -27,4 +11,20 @@ while True:
     while not cnpj_is_valid(cnpj):
         print("CNPJ não é válido")
         cnpj = get_cnpj()
+    empresa_json = get_empresa_by_cnpj(cnpj)
+    empresa = shape_empresa(empresa_json)
+    print("Nome: " + empresa.nome)
+    print("CNPJ: " + f"{cnpj[0:2]}.{cnpj[2:5]}.{cnpj[5:8]}/{cnpj[8:12]}-{cnpj[12:14]}")
+    print("Aberta em: " + empresa.data_de_abertura)
+    print("Telefone para contato: " + empresa.telefone)
+    print("E-mail para contato: " + empresa.email)
+    print("Atividade principal" + str(empresa.atividade_principal))
+    print("Atividades secundárias")
+    for atividade in empresa.atividades_secundarias:
+        print(atividade)
 
+    outra_busca = input("Você deseja buscar outro CNPJ [s/n]: ")
+    if outra_busca.lower() == 'n':
+        break
+
+print("Obrigado por utilizar meu programinha <3")
