@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<main>
+    <form action="" method="POST"> {% csrf_token %} <div class="row">
+            <div class="col">
+                <label for="nomeID" class="form-label">Nome:</label>
+                <input class="form-control" type="text" name="nome" id="nomeID" maxlength="150" {% if empresa %}value={{ empresa.nome }}{% endif %}>
+            </div>
+            <div class="col">
+                <label class="form-label" for="cnpjID">CNPJ:</label>
+                <input class="form-control" type="text" name="cnpj" id="cnpjID" maxlength="18" {% if empresa %}value={{ empresa.cnpj }}{% endif %}>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label class="form-label" for="telefoneID">Telefone:</label>
+                <input class="form-control" type="tel" name="telefone" id="telefoneID" maxlength="13" {% if empresa %}value={{ empresa.telefone }}{% endif %}>
+            </div>
+            <div class="col">
+                <label class="form-label" for="emailID">E-mail:</label>
+                <input class="form-control" type="email" name="email" id="emailID" {% if empresa %}value={{ empresa.email }}{% endif %}>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label class="form-label" for="ufID">Estado/UF</label>
+                <select name="uf" id="ufID" class="form-control">
+                    {% for unidade in unidades_federativas %}
+                      <option value="{{ unidade.name }}">{{ unidade.label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col" style="padding: 2rem;">
+                <button type="submit" class="btn btn-success">Salvar</button>
+                <a href="{% url 'empresa_index'  %}" class="btn btn-danger">Cancelar</a>
+            </div>
+        </div>
+    </form>
+</main>
+{% endblock content %}

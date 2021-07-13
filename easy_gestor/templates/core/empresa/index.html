@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<header style="padding-bottom: 1rem">
+    <div class="row">
+        <div class="col text-center">
+            <h2>Empresas Cadastradas</h2>
+            <a href="{% url 'empresa_create' %}" class="btn btn-primary"> <i class="fas fa-plus"></i> Cadastrar nova
+                empresa</a>
+        </div>
+    </div>
+</header>
+<main>
+    <div class="row">
+        <div class="col">
+            <table class="table table-bordered text-center">
+                <thead>
+                    <th>NOME</th>
+                    <th>CNPJ</th>
+                    <th>TELEFONE</th>
+                    <th>E-MAIL</th>
+                    <th>UF</th>
+                </thead>
+                <tbody> {% for empresa in empresa_list %} <tr>
+                        <td>{{ empresa.nome }}</td>
+                        <td>{{ empresa.cnpj }}</td>
+                        <td>{{ empresa.telefone }}</td>
+                        <td>{{ empresa.email }}</td>
+                        <td>{{ empresa.uf }}</td>
+                    </tr> {% endfor %} </tbody>
+            </table>
+        </div>
+    </div>
+</main> {% endblock %}
