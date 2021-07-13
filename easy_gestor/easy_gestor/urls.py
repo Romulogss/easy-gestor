@@ -15,7 +15,8 @@ Including another URLconf
 """
 from core.views import (
     empresa_index,
-    empresa_create
+    empresa_create,
+    empresa_update
 )
 from django.contrib import admin
 from django.urls import path
@@ -23,5 +24,6 @@ from django.urls import path
 urlpatterns = [
     path('', empresa_index, name='empresa_index'),
     path('empresa/create', empresa_create, name='empresa_create'),
+    path('empresa/update/<str:id>', empresa_update, name='empresa_update'),
     path('admin/', admin.site.urls),
 ]

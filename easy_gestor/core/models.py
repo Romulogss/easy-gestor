@@ -101,8 +101,16 @@ class ServicoPrestado(models.Model):
         null=False,
         blank=False
     )
-    empresa = models.ForeignKey(
+    empresa_prestadora = models.ForeignKey(
         Empresa,
+        related_name='servico_prestado',
+        on_delete=models.DO_NOTHING,
+        null=False,
+        blank=False
+    )
+    empresa_cliente = models.ForeignKey(
+        Empresa,
+        related_name='servico_recebido',
         on_delete=models.CASCADE,
         null=False,
         blank=False
