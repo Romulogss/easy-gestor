@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+    <main>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <select name="empresa" id="empresaID" style="display: none">
+                <option value="{{ servico.empresa.id }}"></option>
+            </select>
+            <div class="row">
+                <div class="col">
+                    <label for="nomeID" class="form-label">Nome:</label>
+                    <input class="form-control" type="text" name="nome" id="nomeID" maxlength="150"
+                           value={{ servico.nome }} required>
+                </div>
+                <div class="col">
+                    <label class="form-label" for="valorID">Valor (R$):</label>
+                    <input class="form-control" type="number" name="valor" id="valorID"
+                           value={{ servico.valor|floatformat }} required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="descricaoID">Descrição</label>
+                    <textarea name="descricao" id="descricaoID" required cols="15" rows="5" class="form-control">{{ servico.descricao }}</textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col" style="padding: 2rem;">
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                    <a href="{% url 'servicos_index' servico.empresa.id %}" class="btn btn-danger">Cancelar</a>
+                </div>
+            </div>
+        </form>
+    </main>
+{% endblock content %}

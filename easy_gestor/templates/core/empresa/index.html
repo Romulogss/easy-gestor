@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load filter %}
 <header style="padding-bottom: 1rem">
     <div class="row">
         <div class="col text-center">
@@ -19,14 +20,49 @@
                     <th>TELEFONE</th>
                     <th>E-MAIL</th>
                     <th>UF</th>
+                    <th></th>
                 </thead>
-                <tbody> {% for empresa in empresa_list %} <tr>
-                        <td>{{ empresa.nome }}</td>
-                        <td>{{ empresa.cnpj }}</td>
-                        <td>{{ empresa.telefone }}</td>
-                        <td>{{ empresa.email }}</td>
-                        <td>{{ empresa.uf }}</td>
-                    </tr> {% endfor %} </tbody>
+                <tbody>
+                    {% for empresa in empresa_list %}
+                        <tr>
+                            <td>{{ empresa.nome }}</td>
+                            <td>{{ empresa.cnpj|mascara_cnpj }}</td>
+                            <td>{{ empresa.telefone|mascara_telefone }}</td>
+                            <td>{{ empresa.email }}</td>
+                            <td>{{ empresa.uf }}</td>
+                            <td>
+                                <form action="empresa/delete/{{empresa.id}}" method="POST" style="display: inline">
+                                    {% csrf_token %}
+                                    <div class="modal fade" id="deleteModal{{empresa.id}}" tabindex="-1"
+                                        aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-body"> Deseja mesmo deletar o cadastro de
+                                                    {{empresa.nome}}? </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary"
+                                                        data-bs-dismiss="modal">Não</button>
+                                                    <button type="submit" class="btn btn-danger">Sim</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn"
+                                        style="margin: 0; padding: 0" data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal{{empresa.id}}" title="Excluir {{empresa.nome}}">
+                                        <i class="fas fa-minus-circle"></i>
+                                    </button>
+                                </form>
+                                <a href="{% url 'empresa_update' empresa.id %}" class="btn" style="margin: 0; padding: 0" title="Editar {{empresa.nome}}">
+                                    <i class="fas fa-user-edit"></i>
+                                </a>
+                                <a href="{% url 'servicos_index' empresa.id %}" class="btn" style="margin: 0; padding: 0">
+                                    <i class="fa fa-list"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
             </table>
         </div>
     </div>

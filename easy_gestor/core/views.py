@@ -86,6 +86,13 @@ def empresa_update(request, id):
     )
 
 
+def empresa_delete(request, id):
+    empresa = Empresa.objects.get(pk=id)
+    if request.method == 'POST':
+        empresa.delete()
+        return redirect('empresa_index')
+
+
 def servico_index(request, empresa_id):
     contexto = {}
     empresa = Empresa.objects.get(pk=empresa_id)
@@ -104,3 +111,28 @@ def servico_index(request, empresa_id):
         'core/servico/index.html',
         contexto
     )
+
+def servico_update(request, id):
+    contexto = {}
+    servico = Servico.objects.get(pk=id)
+    servico_form = ServicoForm(request.POST or None, instance=servico)
+    contexto['servico'] = servico
+    contexto['servico_form'] = servico_form
+    from pprint import pprint
+    pprint(request.POST)
+    print(servico_form.is_valid())
+    if servico_form.is_valid():
+        servico_form.save()
+        return redirect('servicos_index', servico.empresa.id)
+    return render(
+        request,
+        'core/servico/form.html',
+        contexto
+    )
+
+def servico_delete(request, id):
+    servico = Servico.objects.prefetch_related('empresa').get(pk=id)
+    empresa_id = servico.empresa.id
+    if request.method == 'POST':
+        servico.delete()
+        return redirect('servicos_index', empresa_id)

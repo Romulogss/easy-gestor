@@ -17,7 +17,10 @@ from core.views import (
     empresa_index,
     empresa_create,
     empresa_update,
-    servico_index
+    empresa_delete,
+    servico_index,
+    servico_update,
+    servico_delete
 )
 from django.contrib import admin
 from django.urls import path
@@ -26,8 +29,11 @@ urlpatterns = [
     path('', empresa_index, name='empresa_index'),
     path('empresa/create', empresa_create, name='empresa_create'),
     path('empresa/update/<str:id>', empresa_update, name='empresa_update'),
+    path('empresa/delete/<str:id>', empresa_delete, name='empresa_delete'),
 
-    path('servicos/<str:empresa_id>', servico_index, name='servico_index'),
+    path('servicos/<str:empresa_id>', servico_index, name='servicos_index'),
+    path('servicos/update/<str:id>', servico_update, name='servico_update'),
+    path('servicos/delete/<str:id>', servico_delete, name='servico_delete'),
 
     path('admin/', admin.site.urls),
 ]

@@ -1,35 +1,36 @@
 {% extends "base.html" %}
 {% block content %}
+{% load filter %}
     <main>
         <form action="" method="POST">
             {% csrf_token %}
             <div class="row">
                 <div class="col">
                     <label for="nomeID" class="form-label">Nome:</label>
-                    <input class="form-control" type="text" name="nome" id="nomeID" maxlength="150"
+                    <input class="form-control" type="text" required name="nome" id="nomeID" maxlength="150"
                            value={{ empresa.nome }}>
                 </div>
                 <div class="col">
                     <label class="form-label" for="cnpjID">CNPJ:</label>
-                    <input class="form-control" onkeyup="mascaraCNPJ(this.id)" type="text" name="cnpj" id="cnpjID"
-                           maxlength="18" value={{ empresa.cnpj }}>
+                    <input class="form-control" required onkeyup="mascaraCNPJ(this.id)" type="text" name="cnpj" id="cnpjID"
+                           maxlength="18" value={{ empresa.cnpj|mascara_cnpj }}>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
                     <label class="form-label" for="telefoneID">Telefone:</label>
-                    <input class="form-control" type="tel" onkeyup="mascaraTelefone(this.id)" name="telefone" id="telefoneID" maxlength="13"
-                           value={{ empresa.telefone }}>
+                    <input class="form-control" type="text" required onkeyup="mascaraTelefone(this.id)" name="telefone" id="telefoneID" maxlength="14"
+                           value="{{ empresa.telefone|mascara_telefone }}">
                 </div>
                 <div class="col">
                     <label class="form-label" for="emailID">E-mail:</label>
-                    <input class="form-control" type="email" name="email" id="emailID" value={{ empresa.email }}>
+                    <input class="form-control" type="email" name="email" id="emailID" required value={{ empresa.email }}>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
                     <label class="form-label" for="ufID">Estado/UF</label>
-                    <select name="uf" id="ufID" class="form-control">
+                    <select name="uf" id="ufID" class="form-control" required>
                         {% for unidade in unidades_federativas %}
                             <option value="{{ unidade.name }}" {% if empresa.uf == unidade %}
                                     selected {% endif %}>{{ unidade.label }}</option>

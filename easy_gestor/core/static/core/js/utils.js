@@ -12,6 +12,6 @@ const mascaraCNPJ = id => {
 const mascaraTelefone = id => {
     let telefone = ''
     telefone = document.getElementById(id).value
-    telefone = telefone.replace(/^(\d{2})(\d)/, "($1)$2" )
+    telefone = telefone.replace(/^(\d{2})(\d)/, "($1) $2" )
     document.getElementById(id).value = telefone
 }
