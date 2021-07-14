@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+    <main>
+        <div class="jumbotron">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <select name="empresa" id="empresaID" style="display: none">
+                    <option value="{{ empresa.id }}"></option>
+                </select>
+                <div class="row">
+                    <div class="col">
+                        <label for="nomeID" class="form-label">Nome:</label>
+                        <input type="text" class="form-control" name="nome" id="nomeID">
+                    </div>
+                    <div class="col">
+                        <label for="valorID" class="form-label">Valor (R$):</label>
+                        <input type="number" class="form-control" name="valor" id="valorID">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="descricaoID" class="from-label">Descrição do serviço:</label>
+                        <textarea name="descricao" id="descricaoID" cols="15" rows="5" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="row" style="padding-top: 1rem">
+                    <div class="col">
+                        <button type="submit" class="btn btn-success">Salvar</button>
+                        <button type="reset" class="btn btn-danger">Limpar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <table class="table table-bordered text-center">
+                    <thead>
+                    <th>Nome</th>
+                    <th>Valor (R$)</th>
+                    <th>Descrição</th>
+                    </thead>
+                    <tbody>
+                    {% for servico in servicos %}
+                        <tr>
+                            <td>{{ servico.nome }}</td>
+                            <td>{{ servico.valor }}</td>
+                            <td>{{ servico.descricao }}</td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+{% endblock %}

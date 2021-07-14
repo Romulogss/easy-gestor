@@ -5,9 +5,9 @@ from .models import (
     ServicoPrestado,
     UnidadesFederativas
 )
-from .forms import EmpresaForm
-# Create your views here.
+from .forms import EmpresaForm, ServicoForm
 from .utils import Utils
+# Create your views here.
 
 
 def empresa_index(request):
@@ -52,6 +52,7 @@ def empresa_create(request):
         contexto
     )
 
+
 def empresa_update(request, id):
     try:
         mutavel = request.POST._mutable
@@ -81,5 +82,25 @@ def empresa_update(request, id):
     return render(
         request,
         'core/empresa/form.html',
+        contexto
+    )
+
+
+def servico_index(request, empresa_id):
+    contexto = {}
+    empresa = Empresa.objects.get(pk=empresa_id)
+    servicos = empresa.servicos.all()
+    contexto['empresa'] = empresa
+    contexto['servicos'] = servicos
+
+    if request.method == 'POST':
+        servico_form = ServicoForm(request.POST)
+        if servico_form.is_valid():
+            servico_form.save()
+            redirect('servico_index', empresa_id)
+
+    return render(
+        request,
+        'core/servico/index.html',
         contexto
     )

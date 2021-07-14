@@ -85,6 +85,7 @@ class Servico(models.Model):
     )
     empresa = models.ForeignKey(
         Empresa,
+        related_name='servicos',
         null=False,
         blank=False,
         on_delete=models.CASCADE
@@ -103,14 +104,14 @@ class ServicoPrestado(models.Model):
     )
     empresa_prestadora = models.ForeignKey(
         Empresa,
-        related_name='servico_prestado',
+        related_name='servicos_prestado',
         on_delete=models.DO_NOTHING,
         null=False,
         blank=False
     )
     empresa_cliente = models.ForeignKey(
         Empresa,
-        related_name='servico_recebido',
+        related_name='servicos_recebido',
         on_delete=models.CASCADE,
         null=False,
         blank=False
