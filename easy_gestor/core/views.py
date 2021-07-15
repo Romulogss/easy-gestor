@@ -5,7 +5,11 @@ from .models import (
     ServicoPrestado,
     UnidadesFederativas
 )
-from .forms import EmpresaForm, ServicoForm
+from .forms import (
+    EmpresaForm,
+    PrestacaoServicoForm,
+    ServicoForm
+)
 from .utils import Utils
 
 
@@ -14,7 +18,7 @@ from .utils import Utils
 
 def empresa_index(request):
     contexto = {}
-    empresa_list = Empresa.objects.all()
+    empresa_list = Empresa.objects.values('id', 'nome', 'cnpj', 'telefone', 'email', 'uf')
     if request.method == 'POST':
         parametro = request.POST['parametro']
         valor_busca = request.POST['valor']
@@ -155,3 +159,34 @@ def servico_delete(request, id):
         return redirect('servicos_index', empresa_id)
 
 
+def index_servicos_prestados(request, empresa_id):
+    contexto = {}
+    empresa = Empresa.objects.get(pk=empresa_id)
+    servicos_prestados = empresa.servicos_prestado.all()
+    contexto['empresa'] = empresa
+    contexto['servicos_prestados'] = servicos_prestados
+
+    return render(
+        request,
+        'core/prestacao_servicos/index.html',
+        contexto
+    )
+
+
+
+def prestacao_de_servico_create(request, empresa_id):
+    contexto = {}
+    empresa = get_object_or_404(Empresa, pk=empresa_id)
+    prestacao_de_servico_form = PrestacaoServicoForm(request.POST or None)
+    empresa_list = Empresa.objects.exclude(id=empresa.id).all()
+    if prestacao_de_servico_form.is_valid():
+        prestacao_de_servico_form.save()
+        return redirect('prestacao_index')
+    contexto['empresa'] = empresa
+    contexto['form'] = prestacao_de_servico_form
+    contexto['empresa_list'] = empresa_list
+    return render(
+        request,
+        'core/prestacao_servicos/form.html',
+        contexto
+    )

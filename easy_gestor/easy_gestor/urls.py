@@ -21,6 +21,8 @@ from core.views import (
     servico_index,
     servico_update,
     servico_delete,
+    index_servicos_prestados,
+    prestacao_de_servico_create
 )
 from django.contrib import admin
 from django.urls import path
@@ -34,6 +36,9 @@ urlpatterns = [
     path('servicos/<str:empresa_id>', servico_index, name='servicos_index'),
     path('servicos/update/<str:id>', servico_update, name='servico_update'),
     path('servicos/delete/<str:id>', servico_delete, name='servico_delete'),
+
+    path('prestacao-servicos/<str:empresa_id>', index_servicos_prestados, name='prestacao_index'),
+    path('prestacao-servicos/create/<str:empresa_id>', prestacao_de_servico_create, name='prestacao_create'),
 
     path('admin/', admin.site.urls),
 ]

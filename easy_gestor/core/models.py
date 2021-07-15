@@ -3,7 +3,6 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.timezone import now
 
 # Create your models here.
-from core.managers import EmpresaManager
 
 
 class UnidadesFederativas(models.TextChoices):
@@ -80,10 +79,8 @@ class Servico(models.Model):
         on_delete=models.CASCADE
     )
 
-    objects = EmpresaManager()
-
     def __str__(self) -> str:
-        return f'{self.nome} | {self.descricao[0:25]}...'
+        return f'{self.nome}'
 
 
 class ServicoPrestado(models.Model):
