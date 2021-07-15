@@ -2,6 +2,11 @@
 {% block content %}
     <main>
         <div class="row">
+            <div class="col text-center">
+                <h2>Serviços oferecidos por {{ empresa.nome }}</h2>
+            </div>
+        </div>
+        <div class="row">
             <form action="" method="POST" class="col">
                 {% csrf_token %}
                 <select name="empresa" id="empresaID" style="display: none">
@@ -12,19 +17,7 @@
                         <label for="nomeID" class="form-label">Nome:</label>
                         <input type="text" class="form-control" name="nome" id="nomeID">
                     </div>
-                    <div class="col">
-                        <label for="valorID" class="form-label">Valor (R$):</label>
-                        <input type="number" class="form-control" name="valor" id="valorID">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <label for="descricaoID" class="from-label">Descrição do serviço:</label>
-                        <textarea name="descricao" id="descricaoID" cols="15" rows="5" class="form-control"></textarea>
-                    </div>
-                </div>
-                <div class="row" style="padding-top: 1rem">
-                    <div class="col">
+                    <div class="col" style="padding-top: 2rem">
                         <button type="submit" class="btn btn-success">Salvar</button>
                         <button type="reset" class="btn btn-danger">Limpar</button>
                     </div>
@@ -37,40 +30,40 @@
                 <table class="table table-bordered text-center">
                     <thead>
                     <th>Nome</th>
-                    <th>Valor (R$)</th>
-                    <th>Descrição</th>
                     <td></td>
                     </thead>
                     <tbody>
                     {% for servico in servicos %}
                         <tr>
                             <td>{{ servico.nome }}</td>
-                            <td>{{ servico.valor }}</td>
-                            <td>{{ servico.descricao }}</td>
                             <td>
-                                <form action="delete/{{servico.id}}" method="POST" style="display: inline">
+                                <form action="delete/{{ servico.id }}" method="POST" style="display: inline">
                                     {% csrf_token %}
-                                    <div class="modal fade" id="deleteModal{{servico.id}}" tabindex="-1"
-                                        aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="deleteModal{{ servico.id }}" tabindex="-1"
+                                         aria-labelledby="deleteModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-body"> Deseja mesmo deletar o cadastro de
-                                                    {{servico.nome}}? </div>
+                                                    {{ servico.nome }}?
+                                                </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-primary"
-                                                        data-bs-dismiss="modal">Não</button>
+                                                            data-bs-dismiss="modal">Não
+                                                    </button>
                                                     <button type="submit" class="btn btn-danger">Sim</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <button type="button" class="btn"
-                                        style="margin: 0; padding: 0" data-bs-toggle="modal"
-                                        data-bs-target="#deleteModal{{servico.id}}" title="Excluir {{servico.nome}}">
+                                            style="margin: 0; padding: 0" data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal{{ servico.id }}"
+                                            title="Excluir {{ servico.nome }}">
                                         <i class="fas fa-minus-circle"></i>
                                     </button>
                                 </form>
-                                <a href="{% url 'servico_update' servico.id %}" class="btn" style="margin: 0; padding: 0" title="Editar {{servico.nome}}">
+                                <a href="{% url 'servico_update' servico.id %}" class="btn"
+                                   style="margin: 0; padding: 0" title="Editar {{ servico.nome }}">
                                     <i class="fas fa-user-edit"></i>
                                 </a>
                             </td>

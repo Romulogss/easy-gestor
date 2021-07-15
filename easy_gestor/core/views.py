@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from .models import (
     Empresa,
     Servico,
@@ -7,12 +7,27 @@ from .models import (
 )
 from .forms import EmpresaForm, ServicoForm
 from .utils import Utils
+
+
 # Create your views here.
 
 
 def empresa_index(request):
     contexto = {}
     empresa_list = Empresa.objects.all()
+    if request.method == 'POST':
+        parametro = request.POST['parametro']
+        valor_busca = request.POST['valor']
+        if parametro == 'nome':
+            empresa_list = Empresa.objects.filter(nome__icontains=valor_busca)
+        elif parametro == 'cnpj':
+            empresa_list = Empresa.objects.filter(cnpj__icontains=valor_busca)
+        elif parametro == 'uf':
+            empresa_list = Empresa.objects.filter(uf__icontains=valor_busca)
+        elif parametro == 'email':
+            empresa_list = Empresa.objects.filter(email__icontains=valor_busca)
+        elif parametro == 'telefone':
+            empresa_list = Empresa.objects.filter(telefone__icontains=valor_busca)
     contexto['empresa_list'] = empresa_list
 
     return render(
@@ -95,7 +110,7 @@ def empresa_delete(request, id):
 
 def servico_index(request, empresa_id):
     contexto = {}
-    empresa = Empresa.objects.get(pk=empresa_id)
+    empresa = get_object_or_404(Empresa, pk=empresa_id)
     servicos = empresa.servicos.all()
     contexto['empresa'] = empresa
     contexto['servicos'] = servicos
@@ -104,13 +119,14 @@ def servico_index(request, empresa_id):
         servico_form = ServicoForm(request.POST)
         if servico_form.is_valid():
             servico_form.save()
-            redirect('servico_index', empresa_id)
+            redirect('servicos_index', empresa_id)
 
     return render(
         request,
         'core/servico/index.html',
         contexto
     )
+
 
 def servico_update(request, id):
     contexto = {}
@@ -130,9 +146,12 @@ def servico_update(request, id):
         contexto
     )
 
+
 def servico_delete(request, id):
     servico = Servico.objects.prefetch_related('empresa').get(pk=id)
     empresa_id = servico.empresa.id
     if request.method == 'POST':
         servico.delete()
         return redirect('servicos_index', empresa_id)
+
+

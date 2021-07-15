@@ -20,7 +20,7 @@ from core.views import (
     empresa_delete,
     servico_index,
     servico_update,
-    servico_delete
+    servico_delete,
 )
 from django.contrib import admin
 from django.urls import path

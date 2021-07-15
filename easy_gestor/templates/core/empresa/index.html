@@ -1,28 +1,55 @@
 {% extends 'base.html' %}
 {% block content %}
-{% load filter %}
-<header style="padding-bottom: 1rem">
-    <div class="row">
-        <div class="col text-center">
-            <h2>Empresas Cadastradas</h2>
-            <a href="{% url 'empresa_create' %}" class="btn btn-primary"> <i class="fas fa-plus"></i> Cadastrar nova
-                empresa</a>
+    {% load filter %}
+    <header style="padding-bottom: 1rem">
+        <div class="row">
+            <div class="col text-center">
+                <h2>Empresas Cadastradas</h2>
+                <a href="{% url 'empresa_create' %}" class="btn btn-primary"> <i class="fas fa-plus"></i> Cadastrar nova
+                    empresa</a>
+            </div>
         </div>
-    </div>
-</header>
-<main>
-    <div class="row">
-        <div class="col">
-            <table class="table table-bordered text-center">
-                <thead>
+        <div class="row">
+            <div class="col">
+            </div>
+            <div class="col text-center">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <label for="valorID">Dado de busca:</label>
+                    <input type="text" name="valor" id="valorID" class="form-control">
+                    <label for="parametroID">Buscar por:</label>
+                    <select name="parametro" id="parametroID" class="form-control text-center">
+                        <option value="nome">Nome</option>
+                        <option value="cnpj">CNPJ</option>
+                        <option value="uf">sigla da UF</option>
+                        <option value="email">Email</option>
+                        <option value="telefone">Telefone</option>
+                    </select>
+                    <br>
+                    <div class="row">
+                        <div class="col">
+                            <button type="submit" class="btn btn-primary">Buscar</button>
+                            <a href="{% url 'empresa_index' %}" class="btn btn-danger">Limpar Busca</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col"></div>
+        </div>
+    </header>
+    <main>
+        <div class="row">
+            <div class="col">
+                <table class="table table-bordered text-center">
+                    <thead>
                     <th>NOME</th>
                     <th>CNPJ</th>
                     <th>TELEFONE</th>
                     <th>E-MAIL</th>
                     <th>UF</th>
                     <th></th>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     {% for empresa in empresa_list %}
                         <tr>
                             <td>{{ empresa.nome }}</td>
@@ -31,39 +58,44 @@
                             <td>{{ empresa.email }}</td>
                             <td>{{ empresa.uf }}</td>
                             <td>
-                                <form action="empresa/delete/{{empresa.id}}" method="POST" style="display: inline">
+                                <form action="empresa/delete/{{ empresa.id }}" method="POST" style="display: inline">
                                     {% csrf_token %}
-                                    <div class="modal fade" id="deleteModal{{empresa.id}}" tabindex="-1"
-                                        aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="deleteModal{{ empresa.id }}" tabindex="-1"
+                                         aria-labelledby="deleteModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-body"> Deseja mesmo deletar o cadastro de
-                                                    {{empresa.nome}}? </div>
+                                                    {{ empresa.nome }}?
+                                                </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-primary"
-                                                        data-bs-dismiss="modal">Não</button>
+                                                            data-bs-dismiss="modal">Não
+                                                    </button>
                                                     <button type="submit" class="btn btn-danger">Sim</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <button type="button" class="btn"
-                                        style="margin: 0; padding: 0" data-bs-toggle="modal"
-                                        data-bs-target="#deleteModal{{empresa.id}}" title="Excluir {{empresa.nome}}">
+                                            style="margin: 0; padding: 0" data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal{{ empresa.id }}"
+                                            title="Excluir {{ empresa.nome }}">
                                         <i class="fas fa-minus-circle"></i>
                                     </button>
                                 </form>
-                                <a href="{% url 'empresa_update' empresa.id %}" class="btn" style="margin: 0; padding: 0" title="Editar {{empresa.nome}}">
+                                <a href="{% url 'empresa_update' empresa.id %}" class="btn"
+                                   style="margin: 0; padding: 0" title="Editar {{ empresa.nome }}">
                                     <i class="fas fa-user-edit"></i>
                                 </a>
-                                <a href="{% url 'servicos_index' empresa.id %}" class="btn" style="margin: 0; padding: 0">
+                                <a href="{% url 'servicos_index' empresa.id %}" class="btn"
+                                   style="margin: 0; padding: 0">
                                     <i class="fa fa-list"></i>
                                 </a>
                             </td>
                         </tr>
                     {% endfor %}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
-</main> {% endblock %}
+    </main> {% endblock %}
