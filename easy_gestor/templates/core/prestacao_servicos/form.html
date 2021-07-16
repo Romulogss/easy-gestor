@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col">
+                    <label for="dataID" class="form-label">Data do serviço:</label>
+                    <input class="form-control" type="date" name="data" id="dataID" required value="{{ servico_prestado.data|date:'Y-m-d' }}">
+                </div>
+                <div class="col">
+                    <label for="valorID" class="form-label">Valor (R$)</label>
+                    <input class="form-control" placeholder="ex: 1.000,00" type="number" name="valor" id="valorID" required value="{{ servico_prestado.valor|floatformat }}">
+                </div>
+                <div class="col">
+                    <label for="servicoID" class="form-label">Serviço prestado:</label>
+                    <select name="servico" id="servicoID" class="form-control" required>
+                        {% for servico in servicos %}
+                            <option value="{{ servico.id }}" {% if servico_prestado.servico.id == servico.id %} selected {% endif %}>{{ servico.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="empresaClienteID" class="form-label">Empresa cliente:</label>
+                    <select name="empresa_cliente" id="empresaClienteID" class="form-control" required>
+                        {% for empresa in empresa_list %}
+                            <option value="{{ empresa.id }}" {% if servico_prestado.empresa_cliente.id == empresa.id %} selected {% endif %}>{{ empresa.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="empresaPrestadoraID" class="form-label">Empresa prestadora:</label>
+                    <select name="empresa_prestadora" id="empresaPrestadoraID" class="form-control">
+                        <option value="{{ empresa.id }}" selected>{{ empresa.nome }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="descricaoID" class="form-label">Descrição:</label>
+                    <textarea name="descricao" id="descricaoID" cols="15" rows="5" class="form-control" required>{{ servico_prestado.descricao }}</textarea>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col">
+                    <button class="btn btn-success" type="submit">Salvar</button>
+                    <a href="{% url 'prestacao_index' empresa.id %}" class="btn btn-danger">Cancelar</a>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

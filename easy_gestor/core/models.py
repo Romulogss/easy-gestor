@@ -121,4 +121,4 @@ class ServicoPrestado(models.Model):
     )
 
     def __str__(self) -> str:
-        return f'{self.data} | {self.empresa.nome} | {self.servico.nome}'
+        return f'{self.data} | {self.servico.nome}'

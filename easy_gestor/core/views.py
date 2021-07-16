@@ -18,7 +18,14 @@ from .utils import Utils
 
 def empresa_index(request):
     contexto = {}
-    empresa_list = Empresa.objects.values('id', 'nome', 'cnpj', 'telefone', 'email', 'uf')
+    empresa_list = Empresa.objects.values(
+        'id',
+        'nome',
+        'cnpj',
+        'telefone',
+        'email',
+        'uf'
+    )
     if request.method == 'POST':
         parametro = request.POST['parametro']
         valor_busca = request.POST['valor']
@@ -123,7 +130,10 @@ def servico_index(request, empresa_id):
         servico_form = ServicoForm(request.POST)
         if servico_form.is_valid():
             servico_form.save()
-            redirect('servicos_index', empresa_id)
+            redirect(
+                'servicos_index',
+                empresa_id
+            )
 
     return render(
         request,
@@ -138,12 +148,12 @@ def servico_update(request, id):
     servico_form = ServicoForm(request.POST or None, instance=servico)
     contexto['servico'] = servico
     contexto['servico_form'] = servico_form
-    from pprint import pprint
-    pprint(request.POST)
-    print(servico_form.is_valid())
     if servico_form.is_valid():
         servico_form.save()
-        return redirect('servicos_index', servico.empresa.id)
+        return redirect(
+            'servicos_index',
+            servico.empresa.id
+        )
     return render(
         request,
         'core/servico/form.html',
@@ -156,7 +166,10 @@ def servico_delete(request, id):
     empresa_id = servico.empresa.id
     if request.method == 'POST':
         servico.delete()
-        return redirect('servicos_index', empresa_id)
+        return redirect(
+            'servicos_index',
+            empresa_id
+        )
 
 
 def index_servicos_prestados(request, empresa_id):
@@ -173,20 +186,72 @@ def index_servicos_prestados(request, empresa_id):
     )
 
 
-
 def prestacao_de_servico_create(request, empresa_id):
     contexto = {}
-    empresa = get_object_or_404(Empresa, pk=empresa_id)
+    empresa = get_object_or_404(
+        Empresa,
+        pk=empresa_id
+    )
+    servicos = empresa.servicos.values(
+        'id',
+        'nome'
+    ).all()
     prestacao_de_servico_form = PrestacaoServicoForm(request.POST or None)
     empresa_list = Empresa.objects.exclude(id=empresa.id).all()
     if prestacao_de_servico_form.is_valid():
         prestacao_de_servico_form.save()
-        return redirect('prestacao_index')
+        return redirect('prestacao_index', empresa_id)
     contexto['empresa'] = empresa
     contexto['form'] = prestacao_de_servico_form
     contexto['empresa_list'] = empresa_list
+    contexto['servicos'] = servicos
     return render(
         request,
         'core/prestacao_servicos/form.html',
         contexto
     )
+
+
+def prestacao_de_servico_update(request, id):
+    contexto = {}
+    servico_prestado = ServicoPrestado.objects.get(pk=id)
+    empresa = get_object_or_404(
+        Empresa,
+        pk=servico_prestado.empresa_prestadora.id
+    )
+    servicos = empresa.servicos.values(
+        'id',
+        'nome'
+    ).all()
+    prestacao_form = PrestacaoServicoForm(
+        request.POST or None,
+        instance=servico_prestado
+    )
+    empresa_list = Empresa.objects.exclude(id=empresa.id).all()
+    contexto['form'] = prestacao_form
+    contexto['servico_prestado'] = servico_prestado
+    contexto['servicos'] = servicos
+    contexto['empresa'] = empresa
+    contexto['empresa_list'] = empresa_list
+    if prestacao_form.is_valid():
+        prestacao_form.save()
+        return redirect(
+            'prestacao_index',
+            servico_prestado.empresa_prestadora.id
+        )
+    return render(
+        request,
+        'core/prestacao_servicos/form.html',
+        contexto
+    )
+
+
+def prestacao_de_servico_delete(request, id):
+    servico_prestado = ServicoPrestado.objects.get(pk=id)
+    empresa_id = servico_prestado.empresa_prestadora.id
+    if request.method == 'POST':
+        servico_prestado.delete()
+        return redirect(
+            'prestacao_index',
+            empresa_id
+        )

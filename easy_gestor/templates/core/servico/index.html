@@ -37,7 +37,7 @@
                         <tr>
                             <td>{{ servico.nome }}</td>
                             <td>
-                                <form action="delete/{{ servico.id }}" method="POST" style="display: inline">
+                                <form action="/servicos/delete/{{ servico.id }}" method="POST" style="display: inline">
                                     {% csrf_token %}
                                     <div class="modal fade" id="deleteModal{{ servico.id }}" tabindex="-1"
                                          aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -64,7 +64,7 @@
                                 </form>
                                 <a href="{% url 'servico_update' servico.id %}" class="btn"
                                    style="margin: 0; padding: 0" title="Editar {{ servico.nome }}">
-                                    <i class="fas fa-user-edit"></i>
+                                    <i class="far fa-edit"></i>
                                 </a>
                             </td>
                         </tr>

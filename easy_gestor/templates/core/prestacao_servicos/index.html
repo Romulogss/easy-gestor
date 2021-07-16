@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+    <header>
+        <div class="row text-center">
+            <div class="col">
+                <h2>Serviços prestados por {{ empresa.nome }}</h2>
+                <a href="{% url 'prestacao_create' empresa.id %}" class="btn btn-primary">
+                    <i class="fa fa-plus"></i> Nova prestação de serviço
+                </a>
+            </div>
+        </div>
+    </header>
+    <hr>
+    <main>
+        <div class="row">
+            <div class="col">
+                <table class="table table-bordered  table-responsive text-center">
+                    <thead class="thead-default">
+                    <tr>
+                        <th>Serviço</th>
+                        <th>Valor (R$)</th>
+                        <th>Descrição</th>
+                        <th>Empresa cliente</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for servico_prestado in servicos_prestados %}
+                            <tr>
+                                <td>{{ servico_prestado.servico.nome }}</td>
+                                <td>{{ servico_prestado.valor }}</td>
+                                <td>{{ servico_prestado.descricao }}</td>
+                                <td>{{ servico_prestado.empresa_cliente.nome }}</td>
+                                <td>
+                                    <form action="/prestacao-servicos/delete/{{ servico_prestado.id }}" method="POST" style="display: inline">
+                                    {% csrf_token %}
+                                    <div class="modal fade" id="deleteModal{{ servico_prestado.id }}" tabindex="-1"
+                                         aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-body"> Deseja mesmo deletar o cadastro do serviço
+                                                    {{ servico_prestado.servico.nome }} prestado para {{ servico_prestado.empresa_cliente.nome }} ?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary"
+                                                            data-bs-dismiss="modal">Não
+                                                    </button>
+                                                    <button type="submit" class="btn btn-danger">Sim</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn"
+                                            style="margin: 0; padding: 0" data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal{{ servico_prestado.id }}"
+                                            title="Excluir esta prestação de serviço">
+                                        <i class="fas fa-minus-circle"></i>
+                                    </button>
+                                </form>
+                                <a href="{% url 'prestacao_update' servico_prestado.id %}" class="btn"
+                                   style="margin: 0; padding: 0" title="Editar">
+                                    <i class="fas fa-user-edit"></i>
+                                </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+b4
